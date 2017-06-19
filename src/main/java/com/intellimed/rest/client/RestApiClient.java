@@ -1,7 +1,10 @@
 package com.intellimed.rest.client;
 
+import java.util.Date;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -48,6 +51,18 @@ public class RestApiClient {
 		System.out.println(message1.getMessage());
 		System.out.println(message2.getMessage());
 
+		Message newMessage = new Message(4, "This is a message from JAX-RS client!", new Date(), "user1");
+		Response postResponse = messagesTarget
+				.request()
+				.post(Entity.json(newMessage));
+		
+		if (postResponse.getStatus() != 201){
+			System.out.println("Error..");
+		} else {
+			Message addedMessage = postResponse.readEntity(Message.class);
+			System.out.println(addedMessage.getMessage());
+		}
+		
 		
 	}
 
