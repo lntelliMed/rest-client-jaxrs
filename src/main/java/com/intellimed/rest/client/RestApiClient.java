@@ -22,11 +22,32 @@ public class RestApiClient {
 		System.out.println(message.getMessage());
 */
 		
-		Message message = client
+		
+/*
+		Message message1 = client
 			.target("http://localhost:8080/advanced-jaxrs-01/webapi/messages/1")
 			.request(MediaType.APPLICATION_JSON)
-			.get(Message.class);
-		System.out.println(message.getMessage());
+			.get(Message.class);		
+*/
+		
+		WebTarget baseTarget = client.target("http://localhost:8080/advanced-jaxrs-01/webapi/");
+		WebTarget messagesTarget = baseTarget.path("messages");
+		//WebTarget singleMessageTarget = messagesTarget.path("1");
+		WebTarget singleMessageTarget = messagesTarget.path("{messageId}");
+		
+		Message message1 = singleMessageTarget
+				.resolveTemplate("messageId", "1")
+				.request(MediaType.APPLICATION_JSON)
+				.get(Message.class);
+		
+		Message message2 = singleMessageTarget
+				.resolveTemplate("messageId", "2")
+				.request(MediaType.APPLICATION_JSON)
+				.get(Message.class);
+		
+		System.out.println(message1.getMessage());
+		System.out.println(message2.getMessage());
+
 		
 	}
 
